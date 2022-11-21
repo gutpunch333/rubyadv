@@ -7,20 +7,24 @@ using UnityEngine;
     public float speed;
     public bool vertical;
     public float changeTime = 3.0f;
+    public ParticleSystem smokeEffect;
 
     Rigidbody2D rigidbody2D;
     float timer;
     int direction = 1;
     bool broken = true;
+    int doFixing;
     
-    //Animator animator;
+    
+    
+    Animator animator;
     
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         timer = changeTime;
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -53,14 +57,14 @@ using UnityEngine;
         if (vertical)
         {
             position.y = position.y + Time.deltaTime * speed * direction;
-            //animator.SetFloat("Move X", 0);
-            //animator.SetFloat("Move Y", direction);
+            animator.SetFloat("Move X", 0);
+            animator.SetFloat("Move Y", direction);
         }
         else
         {
             position.x = position.x + Time.deltaTime * speed * direction;
-            //animator.SetFloat("Move X", direction);
-            //animator.SetFloat("Move Y", 0);
+            animator.SetFloat("Move X", direction);
+            animator.SetFloat("Move Y", 0);
         }
         
         rigidbody2D.MovePosition(position);
@@ -72,7 +76,15 @@ using UnityEngine;
 
         if (player != null)
         {
-            player.ChangeHealth(-1);
+            
+            if (gameObject.tag=="HardBot")
+            {
+                player.ChangeHealth(-2);
+            }
+            else
+            {
+                player.ChangeHealth(-1);
+            }
         }
     }
     
@@ -82,6 +94,11 @@ using UnityEngine;
         broken = false;
         rigidbody2D.simulated = false;
         //optional if you added the fixed animation
-        //animator.SetTrigger("Fixed");
+        animator.SetTrigger("Fixed");
+        smokeEffect.Stop();
+        
+        
+        RubyController fixChange = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<RubyController>();
+        fixChange.callNumberFixed();
     }
 }
