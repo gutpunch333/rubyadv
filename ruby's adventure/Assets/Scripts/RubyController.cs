@@ -20,6 +20,8 @@ using UnityEngine.SceneManagement;
     //public AudioClip loseSound;
     public AudioClip backgroundMusic;
     public AudioSource musicSource;
+    public AudioClip speedSound;
+    public AudioClip frogSound;
     
     public int health { get { return currentHealth; }}
     public int currentHealth;
@@ -27,6 +29,10 @@ using UnityEngine.SceneManagement;
     public float timeInvincible = 2.0f;
     bool isInvincible;
     float invincibleTimer;
+
+    public bool canGoFast;
+    public float timeFast = 0.2f;
+    float fastTimer;
     
     Rigidbody2D rigidbody2d;
     float horizontal;
@@ -39,10 +45,12 @@ using UnityEngine.SceneManagement;
 
     public ParticleSystem healEffect;
     public ParticleSystem hitEffect;
+    public ParticleSystem speedEffect;
 
     public GameObject winObj;
     public GameObject loseObj;
     public GameObject loseObj2;
+    public GameObject speedPlats;
     public Text score;
     public Text ammo;
     //public GameObject camera1;
@@ -53,7 +61,7 @@ using UnityEngine.SceneManagement;
     public bool ifIsStage2 = false;
     public int numFixed;
     private int livesValue = 5;
-
+    
     
     
     // Start is called before the first frame update
@@ -190,7 +198,7 @@ using UnityEngine.SceneManagement;
         if (Input.GetKeyDown(KeyCode.X))
         {
             RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.tag != "speedFrog")
             {
                 if (ifIsStage2 == true){
                     SceneManager.LoadScene(1);
@@ -214,8 +222,45 @@ using UnityEngine.SceneManagement;
                 levelTwoText.DisplayDialog2();
             
                 }
+                PlaySound(frogSound);
+
+
+            }
+            if (hit.collider != null && hit.collider.tag == "speedFrog")
+            {
+                
+
+                /*NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
+                if (character != null)
+                {
+                    character.DisplayDialog();
+                }*/
+
+            
+                NPC2 hideSpeedText = GameObject.FindGameObjectWithTag("speedFrog").gameObject.GetComponent<NPC2>();
+                hideSpeedText.DisplayDialog4();
+            
+                
+                PlaySound(frogSound);
+                speedPlats.SetActive(true);
+
             }
         }
+        
+        if (canGoFast)
+        {
+            fastTimer -= Time.deltaTime;
+            speed = 6;
+            
+            if (fastTimer < 0)
+            {
+                canGoFast = false;
+                speed = 3;
+            }
+        }
+         
+        
+
 
          
     }
@@ -227,6 +272,28 @@ using UnityEngine.SceneManagement;
         position.y = position.y + speed * vertical * Time.deltaTime;
 
         rigidbody2d.MovePosition(position);
+    }
+
+    public void GoingFast()
+    {
+        if (canGoFast)
+                return;
+            
+            canGoFast = true;
+            fastTimer = timeFast;
+        //if (canGoFast==true)
+        //{
+            //speed = 6;
+        
+        //canGoFast = false;
+        //}
+        ParticleSystem playSpeedEffect = Instantiate(speedEffect, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+        
+    }
+
+    public void GottaGoFast()
+    {
+        PlaySound(speedSound);
     }
 
     public void ChangeHealth(int amount)
@@ -243,7 +310,7 @@ using UnityEngine.SceneManagement;
             livesValue = livesValue + amount;
             animator.SetTrigger("Hit");
             ParticleSystem playHitEffect = Instantiate(hitEffect, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
-
+            UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
             PlaySound(hitSound);
 
             

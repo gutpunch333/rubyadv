@@ -14,7 +14,8 @@ using UnityEngine;
     int direction = 1;
     bool broken = true;
     int doFixing;
-    
+    public AudioClip fixSound;
+    AudioSource audioSource;
     
     
     Animator animator;
@@ -25,6 +26,7 @@ using UnityEngine;
         rigidbody2D = GetComponent<Rigidbody2D>();
         timer = changeTime;
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -96,9 +98,14 @@ using UnityEngine;
         //optional if you added the fixed animation
         animator.SetTrigger("Fixed");
         smokeEffect.Stop();
-        
+        PlaySound(fixSound);
         
         RubyController fixChange = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<RubyController>();
         fixChange.callNumberFixed();
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 }

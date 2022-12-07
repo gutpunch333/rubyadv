@@ -8,6 +8,8 @@ TagManager:
   - groundCog
   - NPC
   - Music
+  - speed
+  - speedFrog
   layers:
   - Default
   - TransparentFX

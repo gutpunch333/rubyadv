@@ -107,14 +107,20 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3852109811564209706, guid: 94281ab67339c3b4faf5f5be30e14c28, type: 3}
   throwSound: {fileID: 8300000, guid: b2edfd40873655249ba0e01a5cf705be, type: 3}
   hitSound: {fileID: 8300000, guid: 9b1bb1f450b7d444fa4a8019d13519a7, type: 3}
-  winSound: {fileID: 0}
-  loseSound: {fileID: 0}
+  backgroundMusic: {fileID: 0}
+  musicSource: {fileID: 0}
+  speedSound: {fileID: 8300000, guid: 696365982a3362b46b1d47dfabf72c37, type: 3}
+  frogSound: {fileID: 8300000, guid: 609526af8e33c9241b93a305c7f00f1a, type: 3}
   currentHealth: 0
   timeInvincible: 2
+  canGoFast: 0
+  timeFast: 0.3
   healEffect: {fileID: 4090968478665676764, guid: 0b57dd83a41436745beab396e2cc27a2, type: 3}
   hitEffect: {fileID: 7629633905694410905, guid: e4e7bc48f5e97d2459af2e7baae8aa34, type: 3}
+  speedEffect: {fileID: 4090968478665676764, guid: 3c65ccd95f34ea04d8f2d56e3bcd337e, type: 3}
   winObj: {fileID: 0}
   loseObj: {fileID: 0}
+  loseObj2: {fileID: 0}
   score: {fileID: 0}
   ammo: {fileID: 0}
   ifIsStage2: 0
